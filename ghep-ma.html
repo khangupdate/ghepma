@@ -103,27 +103,7 @@ html, body {
 .empty-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 260px; }
 
 /* ===== FAB ===== */
-.fab {
-  position: fixed;
-  bottom: calc(var(--safe-bottom) + 20px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-  border: none;
-  border-radius: 99px;
-  padding: 16px 32px;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 800;
-  cursor: pointer;
-  display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 8px 32px rgba(233,69,96,0.45);
-  transition: all 0.15s;
-  white-space: nowrap;
-  z-index: 100;
-}
-.fab:active { transform: translateX(-50%) scale(0.95); }
+/* FAB removed - now inside nav */
 
 /* ===== PRODUCT CARD ===== */
 .product-card {
@@ -563,8 +543,10 @@ html, body {
   background: var(--card);
   border-top: 1px solid var(--border);
   display: flex;
-  padding: 10px 0 calc(var(--safe-bottom));
+  align-items: flex-end;
+  padding: 0 0 calc(var(--safe-bottom));
   z-index: 50;
+  height: calc(62px + var(--safe-bottom));
 }
 .nav-item {
   flex: 1;
@@ -572,7 +554,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 6px 0;
+  padding: 10px 0 6px;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -581,8 +563,86 @@ html, body {
 .nav-label { font-size: 10px; font-weight: 700; color: var(--text3); }
 .nav-item.active .nav-label { color: var(--accent); }
 
+/* Center add button */
+.nav-add-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  cursor: pointer;
+  position: relative;
+}
+.nav-add-inner {
+  width: 58px; height: 58px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 20px rgba(233,69,96,0.5);
+  margin-bottom: 2px;
+  margin-top: -18px;
+  border: 3px solid var(--card);
+  transition: all 0.15s;
+  color: white;
+  font-weight: 900;
+}
+.nav-add-btn:active .nav-add-inner { transform: scale(0.92); }
+.nav-add-label { font-size: 10px; font-weight: 700; color: var(--accent2); }
+
 canvas { display: none; }
 input[type="file"] { display: none; }
+
+/* ===== DELETE ALL POPUP ===== */
+.popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  padding: 20px;
+}
+.popup-overlay.active { display: flex; }
+.popup-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px 20px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  animation: popIn 0.2s ease;
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.popup-icon { font-size: 44px; margin-bottom: 12px; }
+.popup-title { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+.popup-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 24px; }
+.popup-actions { display: flex; gap: 10px; }
+.popup-btn-yes {
+  flex: 1; padding: 14px;
+  background: var(--accent);
+  color: white; border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 15px; font-weight: 800;
+  cursor: pointer;
+}
+.popup-btn-yes:active { opacity: 0.8; }
+.popup-btn-no {
+  flex: 1; padding: 14px;
+  background: var(--card2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  cursor: pointer;
+}
+.popup-btn-no:active { opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -592,6 +652,7 @@ input[type="file"] { display: none; }
     <div class="app-title">Ghép <span>Mã</span></div>
     <div class="header-actions">
       <div class="icon-btn" onclick="showToast('📦 ' + products.length + ' sản phẩm')">📦</div>
+      <div class="icon-btn" onclick="confirmDeleteAll()" style="border-color:rgba(233,69,96,0.4);background:rgba(233,69,96,0.1);" title="Xóa toàn bộ">🗑️</div>
     </div>
   </div>
 
@@ -730,17 +791,22 @@ input[type="file"] { display: none; }
       <div class="nav-icon">☁️</div>
       <div class="nav-label">Xuất & Upload</div>
     </div>
+    <div class="nav-add-btn" id="nav-add" onclick="openBulkImport()">
+      <div class="nav-add-inner">＋</div>
+      <div class="nav-add-label">Thêm ảnh</div>
+    </div>
     <div class="nav-item" id="nav-setup" onclick="switchTab('setup')">
       <div class="nav-icon">⚙️</div>
       <div class="nav-label">Cài đặt</div>
     </div>
+    <div class="nav-item" id="nav-dummy" style="pointer-events:none;opacity:0;">
+      <div class="nav-icon">·</div>
+      <div class="nav-label"> </div>
+    </div>
   </div>
 </div><!-- /app -->
 
-<!-- FAB -->
-<button class="fab" id="fab" onclick="openBulkImport()">
-  <span>＋</span> Thêm ảnh hàng loạt
-</button>
+<!-- FAB removed - button now in nav -->
 
 <!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
@@ -820,6 +886,19 @@ input[type="file"] { display: none; }
 <!-- iOS Safari: input phải ở trong DOM bình thường, không display:none -->
 <input type="file" id="bulkFileInput" accept="image/*" multiple onchange="onBulkFilesChosen(this)" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
 
+<!-- DELETE ALL POPUP -->
+<div class="popup-overlay" id="deleteAllPopup">
+  <div class="popup-box">
+    <div class="popup-icon">🗑️</div>
+    <div class="popup-title">Xóa toàn bộ?</div>
+    <div class="popup-desc" id="deleteAllDesc">Toàn bộ sản phẩm sẽ bị xóa vĩnh viễn, không thể hoàn tác.</div>
+    <div class="popup-actions">
+      <button class="popup-btn-yes" onclick="doDeleteAll()">Xóa hết</button>
+      <button class="popup-btn-no" onclick="closeDeletePopup()">Huỷ</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 <canvas id="canvas"></canvas>
 
@@ -852,7 +931,7 @@ function switchTab(name) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
-  document.getElementById('fab').style.display = name === 'home' ? 'flex' : 'none';
+  // fab removed
   if (name === 'export') updateExportTab();
 }
 
@@ -1382,6 +1461,29 @@ function addLog(box, html) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function confirmDeleteAll() {
+  if (products.length === 0) {
+    showToast('📦 Chưa có sản phẩm nào');
+    return;
+  }
+  document.getElementById('deleteAllDesc').textContent =
+    `Sẽ xóa toàn bộ ${products.length} sản phẩm (${products.reduce((s,p)=>s+p.images.length,0)} ảnh). Không thể hoàn tác!`;
+  document.getElementById('deleteAllPopup').classList.add('active');
+}
+
+function closeDeletePopup() {
+  document.getElementById('deleteAllPopup').classList.remove('active');
+}
+
+function doDeleteAll() {
+  products = [];
+  saveToStorage();
+  renderProducts();
+  updateExportTab();
+  closeDeletePopup();
+  showToast('🗑️ Đã xóa toàn bộ sản phẩm');
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
