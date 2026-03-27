@@ -1362,7 +1362,7 @@ async function startExport() {
     for (let i = 0; i < product.images.length; i++) {
       try {
         const blob = await drawCodeOnImage(product.images[i], product.code);
-        const filename = `${product.code}_${i+1}.jpg`;
+        const filename = `${product.code}.jpg`;
         await uploadToDrive(blob, filename, subFolderId);
         addLog(progressLog, `<span class="ok">✅ ${filename}</span>`);
       } catch(e) {
@@ -1395,7 +1395,7 @@ async function drawCodeOnImage(base64, code) {
       const tw = ctx.measureText(code).width;
       const pad = 16;
       const x = img.width  - tw - pad;
-      const y = img.height - pad;
+      const y = img.height - pad * 4;
 
       // Dark opaque background
       ctx.fillStyle = 'rgba(0,0,0,0.85)';
