@@ -739,44 +739,6 @@ input[type="file"] { display: none; }
           </div>
         </div>
       </div>
-
-      <div class="setup-card">
-        <div style="font-size:15px;font-weight:900;margin-bottom:12px;">🔑 Kết nối Google Drive</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:16px;">
-          Để upload ảnh tự động lên Drive, bạn cần nhập <strong>Google Client ID</strong>:
-        </div>
-        <div class="setup-step" style="border:none;padding:0 0 16px;">
-          <div class="step-circle" style="background:var(--blue);">G</div>
-          <div class="step-content">
-            <div class="step-title">Lấy Google Client ID</div>
-            <div class="step-desc">
-              1. Vào <code>console.cloud.google.com</code><br>
-              2. Tạo project mới → <code>APIs & Services</code><br>
-              3. Bật <code>Google Drive API</code><br>
-              4. Tạo <code>OAuth 2.0 Client ID</code> → chọn <code>Web application</code><br>
-              5. Copy Client ID dán vào ô dưới
-            </div>
-          </div>
-        </div>
-        <div>
-          <input id="clientIdInput" type="text" placeholder="Dán Google Client ID vào đây..."
-            style="width:100%;background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:13px;outline:none;margin-bottom:10px;"
-            oninput="saveClientId()">
-        </div>
-      </div>
-
-      <!-- NEW: Drive Folder Setting -->
-      <div class="setup-card">
-        <div style="font-size:15px;font-weight:900;margin-bottom:8px;">📂 Thư mục Drive đích</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px;">
-          Dán <strong>Folder ID</strong> hoặc <strong>link thư mục Drive</strong>. App sẽ tạo subfolder theo ngày bên trong.
-        </div>
-        <input id="folderIdInput" type="text" placeholder="ID hoặc link thư mục Drive..."
-          style="width:100%;background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:13px;outline:none;margin-bottom:8px;"
-          oninput="saveFolderId()">
-        <div id="folderIdPreview" style="font-size:12px;color:var(--text2);margin-bottom:12px;"></div>
-        <button class="btn-main" onclick="testDriveLogin()">🔑 Kiểm tra kết nối</button>
-      </div>
     </div>
 
   </div><!-- /content -->
@@ -918,7 +880,6 @@ let currentAssignIdx = 0;
 let currentSelectedCode = null;
 
 // ===== INIT =====
-document.getElementById('clientIdInput').value = clientId;
   if (googleToken) {
   document.getElementById('driveStatusName').textContent = 'Google Drive đã kết nối';
   document.getElementById('driveStatusSub').innerHTML = '<span class="dot"></span>Sẵn sàng upload';
@@ -926,8 +887,6 @@ document.getElementById('clientIdInput').value = clientId;
   document.getElementById('driveLoginBtn').style.color = 'var(--green)';
   document.getElementById('driveLoginBtn').style.borderColor = 'var(--green)';
 }
-document.getElementById('folderIdInput').value = targetFolderId;
-updateFolderIdPreview();
 updateFolderName();
 renderProducts();
 updateExportTab();
