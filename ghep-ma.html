@@ -1174,7 +1174,10 @@ function closeReorderSheet() {
   renderGroupPreview(); // refresh step-1 preview
 }
 
-/** Render the flat grid (all images as one flat sequence, grouped visually by 4) */
+/**
+ * Full rebuild of flat grid — only called on first open or when count changes.
+ * Uses data-idx attributes so patchFlatGrid can update in-place.
+ */
 function renderFlatGrid() {
   const total = flatList.length;
   const numGroups = Math.ceil(total / 4);
@@ -1186,51 +1189,85 @@ function renderFlatGrid() {
   let html = '';
 
   for (let g = 0; g < numGroups; g++) {
-    html += `<div class="flat-group">`;
-    html += `<div class="flat-group-label">Nhóm ${g+1}</div>`;
-    html += `<div class="flat-img-row">`;
+    html += `<div class="flat-group" id="fgroup-${g}">`;
+    html += `<div class="flat-group-label" id="fglabel-${g}">Nhóm ${g+1}</div>`;
+    html += `<div class="flat-img-row" id="frow-${g}">`;
 
     for (let slot = 0; slot < 4; slot++) {
       const flatIdx = g * 4 + slot;
       if (flatIdx >= total) {
-        // empty slot
-        html += `<div class="flat-img-cell" style="border:2px dashed var(--border);cursor:default;"></div>`;
+        html += `<div class="flat-img-cell fslot-empty" style="border:2px dashed var(--border);cursor:default;" data-slot="${g*4+slot}"></div>`;
         continue;
       }
       const item = flatList[flatIdx];
-      const isSelected = reorderSrcIdx === flatIdx;
+      const isSel = reorderSrcIdx === flatIdx;
       html += `
-        <div class="flat-img-cell ${isSelected ? 'selected-src' : ''}"
-             id="fcell-${flatIdx}"
-             onclick="selectFlatImg(${flatIdx})">
-          <img src="${item.url}" loading="lazy">
+        <div class="flat-img-cell${isSel?' selected-src':''}" id="fcell-${flatIdx}" data-idx="${flatIdx}" onclick="selectFlatImg(${flatIdx})">
+          <img src="${item.url}">
           <div class="cell-num">${flatIdx + 1}</div>
           <div class="cell-select-ring">✦</div>
-        </div>
-      `;
+        </div>`;
     }
-
     html += `</div></div>`;
   }
 
   wrap.innerHTML = html;
+  wrap._renderedTotal = total;
+}
+
+/**
+ * Patch existing DOM cells in-place: update src, number, onclick, selected state.
+ * Does NOT recreate elements → no image re-decode → no lag.
+ * Falls back to full rebuild only if the number of cells changed.
+ */
+function patchFlatGrid() {
+  const total = flatList.length;
+  const wrap = document.getElementById('flatGridWrap');
+
+  // If total changed (e.g. future feature), do full rebuild
+  if (wrap._renderedTotal !== total) {
+    renderFlatGrid();
+    return;
+  }
+
+  const numGroups = Math.ceil(total / 4);
+  document.getElementById('reorderTotalCount').textContent = total;
+  document.getElementById('reorderGroupCount').textContent = numGroups;
+
+  for (let flatIdx = 0; flatIdx < total; flatIdx++) {
+    const cell = document.getElementById('fcell-' + flatIdx);
+    if (!cell) continue;
+
+    const item = flatList[flatIdx];
+    const isSel = reorderSrcIdx === flatIdx;
+
+    // Update image src only if changed (avoids re-decode if same url)
+    const img = cell.querySelector('img');
+    if (img && img.src !== item.url) img.src = item.url;
+
+    // Update number label
+    const numEl = cell.querySelector('.cell-num');
+    if (numEl) numEl.textContent = flatIdx + 1;
+
+    // Update onclick
+    cell.onclick = () => selectFlatImg(flatIdx);
+    cell.dataset.idx = flatIdx;
+
+    // Update selected state
+    if (isSel) cell.classList.add('selected-src');
+    else cell.classList.remove('selected-src');
+  }
 }
 
 function selectFlatImg(flatIdx) {
   if (reorderSrcIdx === flatIdx) {
     // tap again = deselect
     reorderSrcIdx = null;
-    renderFlatGrid();
+    patchFlatGrid();
     return;
   }
   reorderSrcIdx = flatIdx;
-  renderFlatGrid();
-
-  // Scroll selected into view
-  setTimeout(() => {
-    const el = document.getElementById('fcell-' + flatIdx);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 80);
+  patchFlatGrid();
 
   openMoveInputPopup(flatIdx);
 }
@@ -1262,7 +1299,7 @@ function openMoveInputPopup(srcIdx) {
 function closeMoveInputPopup() {
   document.getElementById('moveInputPopup').classList.remove('active');
   reorderSrcIdx = null;
-  renderFlatGrid();
+  patchFlatGrid();
 }
 
 function onMoveNumInput() {
@@ -1302,27 +1339,27 @@ function confirmMove() {
   const srcIdx  = reorderSrcIdx;
   const destIdx = destPos - 1; // 0-based
 
-  // Splice out from src, insert at dest
+  // Splice out from src, insert at dest (domino effect)
   const [item] = flatList.splice(srcIdx, 1);
   flatList.splice(destIdx, 0, item);
+  syncFlatToGroups();
 
+  // Close popup, clear selection
   document.getElementById('moveInputPopup').classList.remove('active');
   reorderSrcIdx = null;
 
-  renderFlatGrid();
-  syncFlatToGroups();
+  // Patch DOM in-place — no full rebuild, no image re-decode, no lag
+  patchFlatGrid();
 
-  // Flash the moved cell
-  setTimeout(() => {
-    const el = document.getElementById('fcell-' + destIdx);
-    if (el) {
-      el.classList.add('just-moved');
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => el.classList.remove('just-moved'), 700);
-    }
-  }, 50);
+  // Flash the destination cell
+  const el = document.getElementById('fcell-' + destIdx);
+  if (el) {
+    el.classList.add('just-moved');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => el.classList.remove('just-moved'), 700);
+  }
 
-  showToast(`✅ Ảnh đã chuyển từ vị trí ${srcIdx+1} → ${destPos}`);
+  showToast(`✅ ${srcIdx+1} → ${destPos} · Nhấn ảnh để tiếp tục`);
 }
 
 // ===== STEP 2 =====
