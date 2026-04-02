@@ -1118,7 +1118,7 @@ async function onBulkFilesChosen(input) {
   renderGroupPreview();
 
   const remainder = flatList.length % 4;
-  let bannerText = `✅ ${flatList.length} ảnh → ${bulkGroups.length} nhóm (đã sort theo ngày chụp)`;
+  let bannerText = `✅ ${flatList.length} ảnh → ${bulkGroups.length} nhóm (đã sắp xếp theo ngày chụp)`;
   if (remainder > 0) bannerText += ` · nhóm cuối có ${remainder} ảnh`;
   document.getElementById('importPickedBanner').textContent = bannerText;
   document.getElementById('importPickedInfo').style.display = 'block';
