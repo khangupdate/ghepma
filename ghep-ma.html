@@ -8,7 +8,6 @@
 <meta name="apple-mobile-web-app-title" content="Ghép Mã">
 <meta name="theme-color" content="#1a1a2e">
 <title>Ghép Mã Sản Phẩm</title>
-<!-- THÊM MỚI: JSZip để đóng gói ZIP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
 <style>
@@ -83,7 +82,6 @@ html, body {
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ===== EMPTY STATE ===== */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -105,10 +103,6 @@ html, body {
 .empty-title { font-size: 20px; font-weight: 800; }
 .empty-sub { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 260px; }
 
-/* ===== FAB ===== */
-/* FAB removed - now inside nav */
-
-/* ===== PRODUCT CARD ===== */
 .product-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -128,11 +122,7 @@ html, body {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
 }
-.product-code-display {
-  font-size: 16px; font-weight: 900;
-  color: var(--accent2);
-  letter-spacing: 0.05em;
-}
+.product-code-display { font-size: 16px; font-weight: 900; color: var(--accent2); letter-spacing: 0.05em; }
 .product-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
 .card-actions { display: flex; gap: 8px; }
 .card-btn {
@@ -142,8 +132,7 @@ html, body {
   background: var(--card2);
   color: var(--text2);
   font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 12px; font-weight: 700;
   cursor: pointer;
 }
 .card-btn:active { opacity: 0.7; }
@@ -161,24 +150,18 @@ html, body {
   position: relative;
   overflow: hidden;
 }
-.img-cell img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-}
+.img-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .img-cell .code-overlay {
   position: absolute;
   bottom: 4px; right: 4px;
   background: rgba(0,0,0,0.85);
   color: white;
-  font-size: 8px;
-  font-weight: 800;
+  font-size: 8px; font-weight: 800;
   padding: 2px 5px;
   border-radius: 4px;
   letter-spacing: 0.03em;
 }
 
-/* ===== BOTTOM SHEET / MODAL ===== */
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.7);
@@ -208,20 +191,10 @@ html, body {
   border-radius: 2px;
   margin: 14px auto 0;
 }
-.sheet-title {
-  font-size: 18px; font-weight: 900;
-  padding: 16px 20px 0;
-}
-.sheet-sub {
-  font-size: 13px; color: var(--text2);
-  padding: 4px 20px 16px;
-  border-bottom: 1px solid var(--border);
-}
+.sheet-title { font-size: 18px; font-weight: 900; padding: 16px 20px 0; }
+.sheet-sub { font-size: 13px; color: var(--text2); padding: 4px 20px 16px; border-bottom: 1px solid var(--border); }
 
-/* ===== ASSIGN SHEET ===== */
-.assign-preview {
-  padding: 16px 20px 8px;
-}
+.assign-preview { padding: 16px 20px 8px; }
 .assign-img-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -235,10 +208,7 @@ html, body {
   overflow: hidden;
   position: relative;
 }
-.assign-img-cell img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-}
+.assign-img-cell img { width: 100%; height: 100%; object-fit: cover; }
 .assign-img-cell .img-num {
   position: absolute;
   top: 4px; left: 4px;
@@ -249,11 +219,7 @@ html, body {
   border-radius: 6px;
   display: flex; align-items: center; justify-content: center;
 }
-.assign-progress-label {
-  font-size: 12px; color: var(--text2);
-  text-align: center;
-  margin-bottom: 14px;
-}
+.assign-progress-label { font-size: 12px; color: var(--text2); text-align: center; margin-bottom: 14px; }
 
 .code-list-label {
   font-size: 12px; font-weight: 700;
@@ -282,25 +248,12 @@ html, body {
   transition: all 0.15s;
 }
 .code-list-item:active { transform: scale(0.97); }
-.code-list-item.selected {
-  border-color: var(--green);
-  background: rgba(6,214,160,0.1);
-}
-.code-list-item .code-text {
-  font-size: 15px; font-weight: 900;
-  letter-spacing: 0.06em;
-  color: var(--accent2);
-}
-.code-list-item .code-check {
-  font-size: 18px;
-  opacity: 0;
-}
+.code-list-item.selected { border-color: var(--green); background: rgba(6,214,160,0.1); }
+.code-list-item .code-text { font-size: 15px; font-weight: 900; letter-spacing: 0.06em; color: var(--accent2); }
+.code-list-item .code-check { font-size: 18px; opacity: 0; }
 .code-list-item.selected .code-check { opacity: 1; }
 
-/* ===== PASTE CODES SHEET ===== */
-.paste-section {
-  padding: 16px 20px;
-}
+.paste-section { padding: 16px 20px; }
 .pick-label {
   font-size: 12px; font-weight: 700;
   color: var(--text2);
@@ -316,8 +269,7 @@ html, body {
   padding: 14px 16px;
   color: var(--text);
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 14px; font-weight: 700;
   outline: none;
   resize: none;
   line-height: 1.8;
@@ -326,13 +278,8 @@ html, body {
 }
 .codes-textarea:focus { border-color: var(--accent2); }
 .codes-textarea::placeholder { color: var(--text3); font-weight: 600; }
-.codes-count {
-  font-size: 12px; color: var(--text2);
-  margin-top: 8px;
-  text-align: right;
-}
+.codes-count { font-size: 12px; color: var(--text2); margin-top: 8px; text-align: right; }
 
-/* ===== SHEET ACTIONS ===== */
 .sheet-actions {
   padding: 12px 20px 0;
   display: flex;
@@ -347,8 +294,7 @@ html, body {
   border: none;
   border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 16px; font-weight: 800;
   cursor: pointer;
   transition: all 0.15s;
 }
@@ -362,12 +308,10 @@ html, body {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 14px; font-weight: 700;
   cursor: pointer;
 }
 
-/* ===== BULK IMPORT STEP INDICATOR ===== */
 .step-indicator {
   display: flex;
   align-items: center;
@@ -375,28 +319,17 @@ html, body {
   gap: 6px;
   padding: 14px 20px 0;
 }
-.step-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--border);
-  transition: all 0.2s;
-}
-.step-dot.active {
-  width: 24px;
-  border-radius: 4px;
-  background: var(--accent);
-}
+.step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
+.step-dot.active { width: 24px; border-radius: 4px; background: var(--accent); }
 .step-dot.done { background: var(--green); }
 
-/* ===== WARNING BANNER ===== */
 .warn-banner {
   background: rgba(233,69,96,0.12);
   border: 1px solid rgba(233,69,96,0.3);
   border-radius: 12px;
   padding: 12px 16px;
   margin: 0 20px 12px;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 13px; font-weight: 700;
   color: var(--accent2);
   line-height: 1.6;
 }
@@ -406,7 +339,6 @@ html, body {
   color: var(--green);
 }
 
-/* ===== DRIVE SECTION ===== */
 .drive-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -414,9 +346,7 @@ html, body {
   padding: 16px;
   margin-bottom: 14px;
 }
-.drive-status {
-  display: flex; align-items: center; gap: 12px;
-}
+.drive-status { display: flex; align-items: center; gap: 12px; }
 .drive-icon {
   width: 44px; height: 44px;
   background: #1a73e8;
@@ -431,7 +361,6 @@ html, body {
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
 .dot.red { background: var(--accent); }
 
-/* ===== EXPORT SECTION ===== */
 .export-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -446,14 +375,12 @@ html, body {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 14px; font-weight: 700;
   color: var(--blue);
   margin-bottom: 12px;
   display: flex; align-items: center; gap: 8px;
 }
 
-/* ===== PROGRESS ===== */
 .progress-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -463,13 +390,7 @@ html, body {
   display: none;
 }
 .progress-title { font-size: 14px; font-weight: 800; margin-bottom: 12px; }
-.progress-bar-bg {
-  background: var(--card2);
-  border-radius: 99px;
-  height: 8px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
+.progress-bar-bg { background: var(--card2); border-radius: 99px; height: 8px; overflow: hidden; margin-bottom: 8px; }
 .progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
@@ -477,29 +398,12 @@ html, body {
   transition: width 0.4s;
   width: 0%;
 }
-.progress-log {
-  font-size: 11px; color: var(--text2);
-  margin-top: 6px;
-  line-height: 1.8;
-  max-height: 80px;
-  overflow-y: auto;
-}
+.progress-log { font-size: 11px; color: var(--text2); margin-top: 6px; line-height: 1.8; max-height: 80px; overflow-y: auto; }
 .progress-log .ok { color: var(--green); }
 .progress-log .err { color: var(--accent); }
 
-/* ===== SETUP SCREEN ===== */
-.setup-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 14px;
-}
-.setup-step {
-  display: flex; gap: 14px; align-items: flex-start;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-}
+.setup-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+.setup-step { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); }
 .setup-step:last-child { border-bottom: none; }
 .step-circle {
   width: 32px; height: 32px;
@@ -513,15 +417,8 @@ html, body {
 .step-content { flex: 1; }
 .step-title { font-size: 14px; font-weight: 800; margin-bottom: 3px; }
 .step-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
-.step-desc code {
-  background: var(--card2);
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  color: var(--blue);
-}
+.step-desc code { background: var(--card2); padding: 1px 6px; border-radius: 4px; font-size: 11px; color: var(--blue); }
 
-/* ===== TOAST ===== */
 .toast {
   position: fixed;
   top: 60px; left: 50%;
@@ -539,7 +436,6 @@ html, body {
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* ===== NAV TABS ===== */
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -566,7 +462,6 @@ html, body {
 .nav-label { font-size: 10px; font-weight: 700; color: var(--text3); }
 .nav-item.active .nav-label { color: var(--accent); }
 
-/* Center add button */
 .nav-add-btn {
   flex: 1;
   display: flex;
@@ -597,7 +492,6 @@ html, body {
 canvas { display: none; }
 input[type="file"] { display: none; }
 
-/* ===== DELETE ALL POPUP ===== */
 .popup-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.75);
@@ -614,8 +508,7 @@ input[type="file"] { display: none; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 28px 24px 20px;
-  width: 100%;
-  max-width: 320px;
+  width: 100%; max-width: 320px;
   text-align: center;
   animation: popIn 0.2s ease;
 }
@@ -646,6 +539,99 @@ input[type="file"] { display: none; }
   cursor: pointer;
 }
 .popup-btn-no:active { opacity: 0.8; }
+
+/* ===== REORDER SHEET ===== */
+.reorder-group-list {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.reorder-group {
+  background: var(--card2);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+}
+.reorder-group-title { font-size: 12px; font-weight: 800; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+.reorder-img-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.reorder-img-cell {
+  aspect-ratio: 1;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+.reorder-img-cell.selected-img { border-color: var(--accent2); }
+.reorder-img-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.reorder-img-cell .img-pos {
+  position: absolute;
+  top: 3px; left: 3px;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 8px; font-weight: 800;
+  width: 16px; height: 16px;
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+}
+.reorder-img-cell.empty-slot { border: 2px dashed var(--border); cursor: default; }
+
+/* ===== MOVE-TO POPUP ===== */
+.moveto-popup {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 600;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.moveto-popup.active { display: flex; }
+.moveto-box {
+  background: var(--card);
+  border-radius: 24px 24px 0 0;
+  width: 100%;
+  padding: 0 0 calc(var(--safe-bottom) + 16px);
+  max-height: 70dvh;
+  overflow-y: auto;
+}
+.moveto-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 14px auto 0; }
+.moveto-title { font-size: 16px; font-weight: 900; padding: 14px 20px 4px; }
+.moveto-sub { font-size: 12px; color: var(--text2); padding: 0 20px 14px; border-bottom: 1px solid var(--border); }
+.moveto-list { padding: 12px 20px; display: flex; flex-direction: column; gap: 8px; }
+.moveto-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card2);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.moveto-item:active { opacity: 0.7; }
+.moveto-item-imgs { display: flex; gap: 3px; }
+.moveto-item-imgs img { width: 28px; height: 28px; border-radius: 5px; object-fit: cover; }
+.moveto-item-label { font-size: 13px; font-weight: 800; color: var(--text); }
+.moveto-item-count { font-size: 11px; color: var(--text2); margin-left: auto; }
+.moveto-cancel {
+  margin: 0 20px;
+  width: calc(100% - 40px);
+  padding: 14px;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -655,7 +641,7 @@ input[type="file"] { display: none; }
     <div class="app-title">Ghép <span>Mã</span></div>
     <div class="header-actions">
       <div class="icon-btn" onclick="showToast('📦 ' + products.length + ' sản phẩm')">📦</div>
-      <div class="icon-btn" onclick="confirmDeleteAll()" style="border-color:rgba(233,69,96,0.4);background:rgba(233,69,96,0.1);" title="Xóa toàn bộ">🗑️</div>
+      <div class="icon-btn" onclick="confirmDeleteAll()" style="border-color:rgba(233,69,96,0.4);background:rgba(233,69,96,0.1);">🗑️</div>
     </div>
   </div>
 
@@ -692,7 +678,6 @@ input[type="file"] { display: none; }
         <button class="btn-main" id="exportBtn" onclick="startExport()" disabled>
           ☁️ Ghép mã & Upload Drive
         </button>
-        <!-- THÊM MỚI: nút tải ZIP -->
         <button class="btn-main" id="zipBtn" onclick="startZipDownload()" disabled style="background:linear-gradient(135deg,#4cc9f0,#06d6a0);margin-top:10px;">
           📦 Ghép mã & Tải ZIP về máy
         </button>
@@ -700,9 +685,7 @@ input[type="file"] { display: none; }
 
       <div class="progress-card" id="progressCard">
         <div class="progress-title">⏳ Đang xử lý...</div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progressFill"></div>
-        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
         <div class="progress-log" id="progressLog"></div>
       </div>
 
@@ -748,7 +731,7 @@ input[type="file"] { display: none; }
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
@@ -773,38 +756,38 @@ input[type="file"] { display: none; }
       <div class="nav-label"> </div>
     </div>
   </div>
-</div><!-- /app -->
-
-<!-- FAB removed - button now in nav -->
+</div>
 
 <!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="closeAllSheets()"></div>
 
-<!-- ===== SHEET: BULK IMPORT (Step 1 - chọn ảnh + paste mã) ===== -->
+<!-- ===== SHEET: BULK IMPORT ===== -->
 <div class="sheet" id="importSheet">
   <div class="sheet-handle"></div>
-
-  <!-- Step dots -->
   <div class="step-indicator">
     <div class="step-dot active" id="sdot-0"></div>
     <div class="step-dot" id="sdot-1"></div>
     <div class="step-dot" id="sdot-2"></div>
   </div>
 
-  <!-- Step 1: Chọn ảnh -->
+  <!-- Step 1 -->
   <div id="importStep1">
     <div class="sheet-title">Chọn ảnh hàng loạt</div>
-    <div class="sheet-sub">Chọn 1 lần nhiều ảnh — app tự sắp xếp a→z và nhóm 4 ảnh/sản phẩm</div>
+    <div class="sheet-sub">App tự đọc ngày chụp EXIF để sắp xếp, nhóm 4 ảnh/sản phẩm</div>
     <div style="padding:20px;">
-      <label for="bulkFileInput" id="importPickArea"
-        style="display:block;border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
+      <label for="bulkFileInput" style="display:block;border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
         <div style="font-size:48px;margin-bottom:12px;">📸</div>
         <div style="font-size:16px;font-weight:800;margin-bottom:6px;">Nhấn để chọn ảnh</div>
         <div style="font-size:13px;color:var(--text2);">Chọn nhiều ảnh cùng lúc từ thư viện</div>
       </label>
       <div id="importPickedInfo" style="display:none;margin-top:16px;">
         <div class="warn-banner green" id="importPickedBanner"></div>
-        <div id="importGroupPreview" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;max-height:180px;overflow-y:auto;"></div>
+        <div id="importGroupPreview" style="margin-top:12px;max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;"></div>
+        <div style="margin-top:12px;">
+          <button class="btn-secondary" onclick="openReorderSheet()" style="font-size:13px;padding:10px;">
+            🔀 Sắp xếp lại thủ công
+          </button>
+        </div>
       </div>
     </div>
     <div class="sheet-actions">
@@ -813,7 +796,7 @@ input[type="file"] { display: none; }
     </div>
   </div>
 
-  <!-- Step 2: Paste mã -->
+  <!-- Step 2 -->
   <div id="importStep2" style="display:none;">
     <div class="sheet-title">Danh sách mã</div>
     <div class="sheet-sub" id="step2Sub">Paste mã vào đây — mỗi dòng 1 mã</div>
@@ -821,8 +804,7 @@ input[type="file"] { display: none; }
       <div class="pick-label">🏷️ Danh sách mã sản phẩm</div>
       <textarea class="codes-textarea" id="codesTextarea" placeholder="Nhập hoặc paste mã vào đây&#10;Mỗi mã một dòng&#10;VD:&#10;ABC-001&#10;ABC-002&#10;..." oninput="onCodesInput()"></textarea>
       <div class="codes-count" id="codesCount">0 mã</div>
-      <div id="codesMismatchWarn" style="display:none;" class="warn-banner" style="margin:0;">
-      </div>
+      <div id="codesMismatchWarn" style="display:none;" class="warn-banner"></div>
     </div>
     <div class="sheet-actions">
       <button class="btn-main" id="toStep3Btn" onclick="goToStep3()" disabled>Tiếp theo → Gán mã</button>
@@ -830,19 +812,16 @@ input[type="file"] { display: none; }
     </div>
   </div>
 
-  <!-- Step 3: Gán mã cho từng nhóm -->
+  <!-- Step 3 -->
   <div id="importStep3" style="display:none;">
     <div class="sheet-title" id="step3Title">Gán mã cho nhóm 1</div>
     <div class="sheet-sub" id="step3Sub">Chọn mã từ danh sách bên dưới</div>
-
     <div class="assign-preview" id="assignPreview">
       <div class="assign-img-grid" id="assignImgGrid"></div>
       <div class="assign-progress-label" id="assignProgressLabel"></div>
     </div>
-
     <div class="code-list-label">🏷️ Chọn mã cho nhóm này</div>
     <div class="code-list" id="codeListEl"></div>
-
     <div style="height:16px;"></div>
     <div class="sheet-actions" style="padding-top:0;">
       <button class="btn-main" id="assignConfirmBtn" onclick="confirmAssign()" disabled>✅ Xác nhận & nhóm tiếp theo</button>
@@ -852,6 +831,29 @@ input[type="file"] { display: none; }
 </div>
 
 <input type="file" id="bulkFileInput" accept="image/*" multiple onchange="onBulkFilesChosen(this)" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
+
+<!-- ===== REORDER SHEET ===== -->
+<div class="sheet" id="reorderSheet" style="z-index:210;">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">🔀 Sắp xếp lại thủ công</div>
+  <div class="sheet-sub">Nhấn vào ảnh → chọn nhóm muốn chuyển vào</div>
+  <div style="height:14px;"></div>
+  <div class="reorder-group-list" id="reorderGroupList"></div>
+  <div class="sheet-actions" style="margin-top:16px;">
+    <button class="btn-main" onclick="closeReorderSheet()" style="background:linear-gradient(135deg,var(--blue),var(--green));">✅ Xong</button>
+  </div>
+</div>
+
+<!-- ===== MOVE-TO POPUP ===== -->
+<div class="moveto-popup" id="movetoPopup">
+  <div class="moveto-box">
+    <div class="moveto-handle"></div>
+    <div class="moveto-title">Chuyển ảnh sang nhóm</div>
+    <div class="moveto-sub" id="movetoSub">Chọn nhóm muốn chuyển ảnh vào</div>
+    <div class="moveto-list" id="movetoList"></div>
+    <button class="moveto-cancel" onclick="closeMovetoPopup()">Huỷ</button>
+  </div>
+</div>
 
 <!-- DELETE ALL POPUP -->
 <div class="popup-overlay" id="deleteAllPopup">
@@ -876,13 +878,13 @@ let googleToken = localStorage.getItem('gToken') || null;
 let clientId = localStorage.getItem('gClientId') || '756532613645-sqfvg1dsfdnufl5tb4kttmim8ru6lt2l.apps.googleusercontent.com';
 let targetFolderId = localStorage.getItem('gFolderId') || '1feDiRJY-p1ff3cHUfNeQD3rvoqEDjpxX';
 
-// Bulk import state
 let bulkGroups = [];
 let bulkCodes = [];
 let remainingCodes = [];
 let assignedCodes = [];
 let currentAssignIdx = 0;
 let currentSelectedCode = null;
+let reorderSelectedImg = null;
 
 // ===== INIT =====
 if (googleToken) {
@@ -926,6 +928,7 @@ function openBulkImport() {
 function closeAllSheets() {
   document.getElementById('overlay').classList.remove('active');
   document.getElementById('importSheet').classList.remove('active');
+  document.getElementById('reorderSheet').classList.remove('active');
 }
 
 function showImportStep(n) {
@@ -940,67 +943,180 @@ function showImportStep(n) {
   }
 }
 
-// ===== BULK FILE PICK =====
-function triggerBulkPick() {
-  const input = document.getElementById('bulkFileInput');
-  input.value = '';
-  input.click();
+// ===== EXIF DATE READER =====
+function getExifDate(file) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const exif = piexif.load(e.target.result);
+        const dt = (exif['Exif'] && exif['Exif'][piexif.ExifIFD.DateTimeOriginal])
+                || (exif['0th'] && exif['0th'][piexif.ImageIFD.DateTime]);
+        if (dt) {
+          const parts = dt.replace(' ', ':').split(':');
+          const d = new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]);
+          resolve(d.getTime());
+        } else {
+          resolve(file.lastModified);
+        }
+      } catch(e) {
+        resolve(file.lastModified);
+      }
+    };
+    reader.onerror = () => resolve(file.lastModified);
+    reader.readAsDataURL(file);
+  });
 }
 
-function onBulkFilesChosen(input) {
+// ===== BULK FILE PICK =====
+async function onBulkFilesChosen(input) {
   const files = Array.from(input.files);
   if (!files.length) return;
 
-  files.sort((a, b) => a.lastModified - b.lastModified);
+  showToast('⏳ Đang đọc ngày chụp...');
+
+  const dates = await Promise.all(files.map(f => getExifDate(f)));
+  const filesWithDate = files.map((f, i) => ({ file: f, date: dates[i] }));
+  filesWithDate.sort((a, b) => a.date - b.date);
+  const sortedFiles = filesWithDate.map(x => x.file);
 
   bulkGroups = [];
-  for (let i = 0; i < files.length; i += 4) {
-    const grpFiles = files.slice(i, i + 4);
+  for (let i = 0; i < sortedFiles.length; i += 4) {
+    const grpFiles = sortedFiles.slice(i, i + 4);
     const grpUrls = grpFiles.map(f => URL.createObjectURL(f));
     bulkGroups.push({ files: grpFiles, urls: grpUrls });
   }
 
-  const banner = document.getElementById('importPickedBanner');
-  const remainder = files.length % 4;
-  let bannerText = `✅ ${files.length} ảnh → ${bulkGroups.length} nhóm`;
-  if (remainder > 0) bannerText += ` (nhóm cuối có ${remainder} ảnh)`;
-  banner.textContent = bannerText;
+  renderGroupPreview();
+
+  const remainder = sortedFiles.length % 4;
+  let bannerText = `✅ ${sortedFiles.length} ảnh → ${bulkGroups.length} nhóm (đã sort theo ngày chụp)`;
+  if (remainder > 0) bannerText += ` · nhóm cuối có ${remainder} ảnh`;
+  document.getElementById('importPickedBanner').textContent = bannerText;
   document.getElementById('importPickedInfo').style.display = 'block';
-
-  const preview = document.getElementById('importGroupPreview');
-  preview.innerHTML = bulkGroups.map((g, i) => `
-    <div style="position:relative;">
-      <div style="aspect-ratio:1;background:var(--card2);border-radius:8px;overflow:hidden;">
-        <img src="${g.urls[0]}" style="width:100%;height:100%;object-fit:cover;">
-      </div>
-      <div style="position:absolute;bottom:3px;right:3px;background:rgba(0,0,0,0.75);color:white;font-size:8px;font-weight:800;padding:2px 5px;border-radius:4px;">
-        ${g.files.length}🖼
-      </div>
-      <div style="font-size:9px;color:var(--text2);text-align:center;margin-top:3px;font-weight:700;">
-        N${i+1}
-      </div>
-    </div>
-  `).join('');
-
   document.getElementById('toStep2Btn').disabled = false;
   input.value = '';
 }
 
-// ===== STEP 2: PASTE CODES =====
+function renderGroupPreview() {
+  const preview = document.getElementById('importGroupPreview');
+  preview.innerHTML = bulkGroups.map((g, gi) => `
+    <div style="background:var(--card2);border-radius:12px;padding:8px;">
+      <div style="font-size:11px;font-weight:800;color:var(--text2);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em;">
+        Nhóm ${gi+1} · ${g.files.length} ảnh
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;">
+        ${g.urls.map((url, ii) => `
+          <div style="aspect-ratio:1;background:var(--card);border-radius:7px;overflow:hidden;position:relative;">
+            <img src="${url}" style="width:100%;height:100%;object-fit:cover;">
+            <div style="position:absolute;top:2px;left:2px;background:rgba(0,0,0,0.7);color:white;font-size:8px;font-weight:800;width:15px;height:15px;border-radius:4px;display:flex;align-items:center;justify-content:center;">${ii+1}</div>
+          </div>
+        `).join('')}
+        ${g.urls.length < 4 ? Array(4 - g.urls.length).fill('<div style="aspect-ratio:1;border:1.5px dashed var(--border);border-radius:7px;"></div>').join('') : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== REORDER SHEET =====
+function openReorderSheet() {
+  reorderSelectedImg = null;
+  renderReorderSheet();
+  document.getElementById('reorderSheet').classList.add('active');
+}
+
+function closeReorderSheet() {
+  document.getElementById('reorderSheet').classList.remove('active');
+  renderGroupPreview();
+}
+
+function renderReorderSheet() {
+  const list = document.getElementById('reorderGroupList');
+  list.innerHTML = bulkGroups.map((g, gi) => `
+    <div class="reorder-group">
+      <div class="reorder-group-title">Nhóm ${gi+1}</div>
+      <div class="reorder-img-row">
+        ${g.urls.map((url, ii) => `
+          <div class="reorder-img-cell ${reorderSelectedImg && reorderSelectedImg.groupIdx===gi && reorderSelectedImg.imgIdx===ii ? 'selected-img' : ''}"
+               onclick="selectReorderImg(${gi}, ${ii})">
+            <img src="${url}">
+            <div class="img-pos">${ii+1}</div>
+          </div>
+        `).join('')}
+        ${g.urls.length < 4 ? Array(4 - g.urls.length).fill('<div class="reorder-img-cell empty-slot"></div>').join('') : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectReorderImg(groupIdx, imgIdx) {
+  reorderSelectedImg = { groupIdx, imgIdx };
+  renderReorderSheet();
+  openMovetoPopup(groupIdx, imgIdx);
+}
+
+function openMovetoPopup(fromGroup, fromImg) {
+  const img = bulkGroups[fromGroup].urls[fromImg];
+  document.getElementById('movetoSub').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+      <img src="${img}" style="width:36px;height:36px;border-radius:7px;object-fit:cover;">
+      <span>Ảnh ${fromImg+1} của Nhóm ${fromGroup+1} → chuyển sang:</span>
+    </div>
+  `;
+
+  const list = document.getElementById('movetoList');
+  list.innerHTML = bulkGroups.map((g, gi) => {
+    if (gi === fromGroup) return '';
+    return `
+      <div class="moveto-item" onclick="moveImgToGroup(${fromGroup}, ${fromImg}, ${gi})">
+        <div class="moveto-item-imgs">
+          ${g.urls.slice(0,3).map(u => `<img src="${u}">`).join('')}
+        </div>
+        <div class="moveto-item-label">Nhóm ${gi+1}</div>
+        <div class="moveto-item-count">${g.files.length} ảnh</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('movetoPopup').classList.add('active');
+}
+
+function closeMovetoPopup() {
+  document.getElementById('movetoPopup').classList.remove('active');
+  reorderSelectedImg = null;
+  renderReorderSheet();
+}
+
+function moveImgToGroup(fromGroup, fromImg, toGroup) {
+  const file = bulkGroups[fromGroup].files[fromImg];
+  const url  = bulkGroups[fromGroup].urls[fromImg];
+
+  bulkGroups[fromGroup].files.splice(fromImg, 1);
+  bulkGroups[fromGroup].urls.splice(fromImg, 1);
+
+  bulkGroups[toGroup].files.push(file);
+  bulkGroups[toGroup].urls.push(url);
+
+  if (bulkGroups[fromGroup].files.length === 0) {
+    bulkGroups.splice(fromGroup, 1);
+  }
+
+  closeMovetoPopup();
+  showToast(`✅ Đã chuyển ảnh sang Nhóm ${toGroup+1}`);
+}
+
+// ===== STEP 2 =====
 function goToStep2() {
   document.getElementById('step2Sub').textContent = `Cần ít nhất ${bulkGroups.length} mã cho ${bulkGroups.length} nhóm`;
   showImportStep(2);
 }
 
-function backToStep1() {
-  showImportStep(1);
-}
+function backToStep1() { showImportStep(1); }
 
 function onCodesInput() {
   const raw = document.getElementById('codesTextarea').value;
   bulkCodes = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
   document.getElementById('codesCount').textContent = bulkCodes.length + ' mã';
-
   const warn = document.getElementById('codesMismatchWarn');
   if (bulkCodes.length < bulkGroups.length) {
     warn.style.display = 'block';
@@ -1012,24 +1128,25 @@ function onCodesInput() {
   }
 }
 
-// ===== STEP 3: ASSIGN CODES =====
+// ===== STEP 3 =====
 function goToStep3() {
-  remainingCodes = [...bulkCodes];
-  assignedCodes = new Array(bulkGroups.length).fill(null);
-  currentAssignIdx = 0;
+  if (currentAssignIdx === 0) {
+    remainingCodes = [...bulkCodes];
+    assignedCodes = new Array(bulkGroups.length).fill(null);
+  } else {
+    const raw = document.getElementById('codesTextarea').value;
+    remainingCodes = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+  }
   currentSelectedCode = null;
   showImportStep(3);
   renderAssignStep();
 }
 
-function backToStep2() {
-  showImportStep(2);
-}
+function backToStep2() { showImportStep(2); }
 
 function renderAssignStep() {
   const group = bulkGroups[currentAssignIdx];
   const total = bulkGroups.length;
-
   document.getElementById('step3Title').textContent = `Gán mã cho nhóm ${currentAssignIdx + 1}`;
   document.getElementById('step3Sub').textContent = `Nhóm ${currentAssignIdx + 1}/${total} · ${group.files.length} ảnh`;
   document.getElementById('assignProgressLabel').textContent =
@@ -1052,7 +1169,6 @@ function renderAssignStep() {
       <div class="code-check">✅</div>
     </div>
   `).join('');
-
   list.scrollTop = 0;
 }
 
@@ -1065,7 +1181,6 @@ function selectCode(idx, code) {
 
 async function confirmAssign() {
   if (!currentSelectedCode) return;
-
   assignedCodes[currentAssignIdx] = currentSelectedCode.code;
   remainingCodes.splice(currentSelectedCode.idx, 1);
 
@@ -1076,32 +1191,21 @@ async function confirmAssign() {
     const b64 = await fileToBase64(file);
     images.push(b64);
   }
-  const product = {
-    id: Date.now() + currentAssignIdx,
-    code,
-    images,
-    date: new Date().toLocaleDateString('vi-VN'),
-  };
-  products.push(product);
+  products.push({ id: Date.now() + currentAssignIdx, code, images, date: new Date().toLocaleDateString('vi-VN') });
   saveToStorage();
-
   currentAssignIdx++;
 
   if (currentAssignIdx >= bulkGroups.length) {
-    renderProducts();
-    updateExportTab();
-    closeAllSheets();
+    renderProducts(); updateExportTab(); closeAllSheets();
     showToast(`✅ Đã lưu ${bulkGroups.length} sản phẩm!`);
     return;
   }
 
   if (remainingCodes.length === 0 && currentAssignIdx < bulkGroups.length) {
-    renderProducts();
-    saveToStorage();
-    showImportStep(2);
+    renderProducts(); saveToStorage(); showImportStep(2);
     const warn = document.getElementById('codesMismatchWarn');
     warn.style.display = 'block';
-    warn.textContent = `⚠️ Hết mã! Đã gán ${currentAssignIdx} nhóm. Còn ${bulkGroups.length - currentAssignIdx} nhóm chưa có mã. Paste thêm mã vào đây.`;
+    warn.textContent = `⚠️ Hết mã! Đã gán ${currentAssignIdx} nhóm. Còn ${bulkGroups.length - currentAssignIdx} nhóm chưa có mã.`;
     document.getElementById('codesTextarea').value = '';
     document.getElementById('codesCount').textContent = '0 mã';
     document.getElementById('toStep3Btn').disabled = true;
@@ -1109,22 +1213,6 @@ async function confirmAssign() {
     showToast(`⚠️ Hết mã! Paste thêm mã để tiếp tục`);
     return;
   }
-
-  renderAssignStep();
-}
-
-// Override goToStep3 for continue flow
-function goToStep3() {
-  if (currentAssignIdx === 0) {
-    remainingCodes = [...bulkCodes];
-    assignedCodes = new Array(bulkGroups.length).fill(null);
-  } else {
-    const raw = document.getElementById('codesTextarea').value;
-    const newCodes = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-    remainingCodes = [...newCodes];
-  }
-  currentSelectedCode = null;
-  showImportStep(3);
   renderAssignStep();
 }
 
@@ -1132,14 +1220,8 @@ function goToStep3() {
 function renderProducts() {
   const list = document.getElementById('productList');
   const empty = document.getElementById('emptyState');
-
-  if (products.length === 0) {
-    empty.style.display = 'flex';
-    list.innerHTML = '';
-    return;
-  }
+  if (products.length === 0) { empty.style.display = 'flex'; list.innerHTML = ''; return; }
   empty.style.display = 'none';
-
   list.innerHTML = products.map((p, i) => `
     <div class="product-card">
       <div class="product-card-header">
@@ -1164,10 +1246,7 @@ function renderProducts() {
 }
 
 function deleteProduct(i) {
-  products.splice(i, 1);
-  saveToStorage();
-  renderProducts();
-  updateExportTab();
+  products.splice(i, 1); saveToStorage(); renderProducts(); updateExportTab();
   showToast('🗑 Đã xoá sản phẩm');
 }
 
@@ -1189,7 +1268,6 @@ function updateFolderName() {
   return name;
 }
 
-// THÊM MỚI: enable cả nút zipBtn
 function updateExportTab() {
   const summary = document.getElementById('exportSummary');
   const btn = document.getElementById('exportBtn');
@@ -1200,7 +1278,6 @@ function updateExportTab() {
   zipBtn.disabled = !(products.length > 0);
 }
 
-// ===== FOLDER ID =====
 function saveFolderId() {
   const raw = document.getElementById('folderIdInput').value.trim();
   targetFolderId = parseFolderId(raw);
@@ -1219,41 +1296,26 @@ function updateFolderIdPreview() {
   const parsed = parseFolderId(raw);
   const el = document.getElementById('folderIdPreview');
   if (!parsed) { el.textContent = ''; return; }
-  if (raw !== parsed) {
-    el.textContent = `✅ Đã nhận folder ID: ${parsed}`;
-    el.style.color = 'var(--green)';
-  } else {
-    el.textContent = `📂 Folder ID: ${parsed}`;
-    el.style.color = 'var(--text2)';
-  }
+  if (raw !== parsed) { el.textContent = `✅ Đã nhận folder ID: ${parsed}`; el.style.color = 'var(--green)'; }
+  else { el.textContent = `📂 Folder ID: ${parsed}`; el.style.color = 'var(--text2)'; }
   targetFolderId = parsed;
 }
 
-// ===== GOOGLE LOGIN =====
 function saveClientId() {
   clientId = document.getElementById('clientIdInput').value.trim();
   localStorage.setItem('gClientId', clientId);
 }
 
 function loginGoogle() {
-  if (!clientId) {
-    showToast('⚠️ Vào tab Cài đặt để nhập Client ID trước');
-    switchTab('setup');
-    return;
-  }
+  if (!clientId) { showToast('⚠️ Vào tab Cài đặt để nhập Client ID trước'); switchTab('setup'); return; }
   const redirectUri = window.location.href.split('?')[0].split('#')[0];
   const scope = 'https://www.googleapis.com/auth/drive.file';
   const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=consent`;
   window.location.href = url;
 }
 
-function testDriveLogin() {
-  saveClientId();
-  saveFolderId();
-  loginGoogle();
-}
+function testDriveLogin() { saveClientId(); saveFolderId(); loginGoogle(); }
 
-// Handle OAuth redirect
 (function checkToken() {
   const hash = window.location.hash;
   if (hash && hash.includes('access_token')) {
@@ -1271,46 +1333,35 @@ function testDriveLogin() {
   }
 })();
 
-// ===== EXPORT & UPLOAD =====
+// ===== EXPORT =====
 async function startExport() {
   if (!googleToken) { showToast('⚠️ Chưa đăng nhập Google Drive'); return; }
   if (products.length === 0) { showToast('⚠️ Chưa có sản phẩm nào'); return; }
-
   const progressCard = document.getElementById('progressCard');
   const progressFill = document.getElementById('progressFill');
   const progressLog  = document.getElementById('progressLog');
   const exportBtn    = document.getElementById('exportBtn');
   const doneCard     = document.getElementById('doneCard');
-
-  progressCard.style.display = 'block';
-  doneCard.style.display = 'none';
-  exportBtn.disabled = true;
-  progressLog.innerHTML = '';
-
+  progressCard.style.display = 'block'; doneCard.style.display = 'none';
+  exportBtn.disabled = true; progressLog.innerHTML = '';
   const subFolderName = updateFolderName();
-
   addLog(progressLog, '📁 Đang tạo thư mục con trên Drive...');
   let subFolderId;
   try {
     subFolderId = await createDriveFolder(subFolderName, targetFolderId || null);
     addLog(progressLog, `<span class="ok">✅ Thư mục: ${subFolderName}</span>`);
-    if (targetFolderId) addLog(progressLog, `<span class="ok">📂 Bên trong folder ID: ${targetFolderId}</span>`);
   } catch(e) {
     addLog(progressLog, `<span class="err">❌ Lỗi tạo thư mục: ${e.message}</span>`);
-    exportBtn.disabled = false;
-    return;
+    exportBtn.disabled = false; return;
   }
-
   const total = products.reduce((sum, p) => sum + p.images.length, 0);
   let done = 0;
-
   for (const product of products) {
     for (let i = 0; i < product.images.length; i++) {
       try {
         const blob = await drawCodeOnImage(product.images[i], product.code);
-        const filename = `${product.code}.jpg`;
-        await uploadToDrive(blob, filename, subFolderId);
-        addLog(progressLog, `<span class="ok">✅ ${filename}</span>`);
+        await uploadToDrive(blob, `${product.code}.jpg`, subFolderId);
+        addLog(progressLog, `<span class="ok">✅ ${product.code}.jpg</span>`);
       } catch(e) {
         addLog(progressLog, `<span class="err">❌ ${product.code}_${i+1}: ${e.message}</span>`);
       }
@@ -1319,51 +1370,38 @@ async function startExport() {
       await sleep(30);
     }
   }
-
   addLog(progressLog, `🎉 Xong! ${done}/${total} ảnh đã upload.`);
-  doneCard.style.display = 'block';
-  exportBtn.disabled = false;
+  doneCard.style.display = 'block'; exportBtn.disabled = false;
   showToast('🎉 Upload Drive thành công!');
 }
 
-// THÊM MỚI: hàm tải ZIP về máy
+// ===== ZIP =====
 async function startZipDownload() {
   if (products.length === 0) { showToast('⚠️ Chưa có sản phẩm nào'); return; }
-
   const progressCard = document.getElementById('progressCard');
   const progressFill = document.getElementById('progressFill');
   const progressLog  = document.getElementById('progressLog');
   const zipBtn       = document.getElementById('zipBtn');
   const doneCard     = document.getElementById('doneCard');
-
-  progressCard.style.display = 'block';
-  doneCard.style.display = 'none';
-  zipBtn.disabled = true;
-  progressLog.innerHTML = '';
-
+  progressCard.style.display = 'block'; doneCard.style.display = 'none';
+  zipBtn.disabled = true; progressLog.innerHTML = '';
   const zip = new JSZip();
   const total = products.reduce((sum, p) => sum + p.images.length, 0);
   let done = 0;
-
   addLog(progressLog, '📦 Đang ghép mã và đóng gói...');
-
   for (const product of products) {
     for (let i = 0; i < product.images.length; i++) {
       try {
         const blob = await drawCodeOnImage(product.images[i], product.code);
-        // Tên file: MÃ_01.jpg → cùng mã đứng cạnh nhau khi sort
         const filename = `${product.code}_${String(i + 1).padStart(2, '0')}.jpg`;
-
-        // Ghi EXIF date tăng dần để iPhone sort đúng thứ tự
-const fakeDate = new Date(Date.now() - done * 60000); 
-const dateStr = `${fakeDate.getFullYear()}:${String(fakeDate.getMonth()+1).padStart(2,'0')}:${String(fakeDate.getDate()).padStart(2,'0')} ${String(fakeDate.getHours()).padStart(2,'0')}:${String(fakeDate.getMinutes()).padStart(2,'0')}:${String(fakeDate.getSeconds()).padStart(2,'0')}`;
-const exifObj = { "Exif": { [piexif.ExifIFD.DateTimeOriginal]: dateStr } };
-const exifBytes = piexif.dump(exifObj);
-const jpegBase64 = await blobToBase64(blob);
-const newJpeg = piexif.insert(exifBytes, jpegBase64);
-const finalBlob = base64ToBlob(newJpeg, 'image/jpeg');
-const arrayBuffer = await finalBlob.arrayBuffer();
-zip.file(filename, arrayBuffer);
+        const fakeDate = new Date(Date.now() - done * 60000);
+        const dateStr = `${fakeDate.getFullYear()}:${String(fakeDate.getMonth()+1).padStart(2,'0')}:${String(fakeDate.getDate()).padStart(2,'0')} ${String(fakeDate.getHours()).padStart(2,'0')}:${String(fakeDate.getMinutes()).padStart(2,'0')}:${String(fakeDate.getSeconds()).padStart(2,'0')}`;
+        const exifObj = { "Exif": { [piexif.ExifIFD.DateTimeOriginal]: dateStr } };
+        const exifBytes = piexif.dump(exifObj);
+        const jpegBase64 = await blobToBase64(blob);
+        const newJpeg = piexif.insert(exifBytes, jpegBase64);
+        const finalBlob = base64ToBlob(newJpeg, 'image/jpeg');
+        zip.file(filename, await finalBlob.arrayBuffer());
         addLog(progressLog, `<span class="ok">✅ ${filename}</span>`);
       } catch(e) {
         addLog(progressLog, `<span class="err">❌ ${product.code}_${i+1}: ${e.message}</span>`);
@@ -1373,20 +1411,15 @@ zip.file(filename, arrayBuffer);
       await sleep(30);
     }
   }
-
   addLog(progressLog, '⏳ Đang tạo file ZIP...');
   const zipBlob = await zip.generateAsync({ type: 'blob' });
   const zipName = updateFolderName() + '.zip';
   const url = URL.createObjectURL(zipBlob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = zipName;
-  a.click();
+  a.href = url; a.download = zipName; a.click();
   URL.revokeObjectURL(url);
-
   addLog(progressLog, `🎉 Xong! File <b>${zipName}</b> đã tải về.`);
-  doneCard.style.display = 'block';
-  zipBtn.disabled = false;
+  doneCard.style.display = 'block'; zipBtn.disabled = false;
   showToast('📦 Tải ZIP thành công!');
 }
 
@@ -1396,28 +1429,21 @@ async function drawCodeOnImage(base64, code) {
     const ctx = canvas.getContext('2d');
     const img = new Image();
     img.onload = () => {
-      canvas.width  = img.width;
-      canvas.height = img.height;
+      canvas.width = img.width; canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-
       const fontSize = Math.max(10, Math.round(img.width * 0.0125));
       ctx.font = `bold ${fontSize}px Arial`;
       const tw = ctx.measureText(code).width;
       const pad = 16;
-      const x = img.width  - tw - pad;
+      const x = img.width - tw - pad;
       const y = img.height - pad * 4;
-
       ctx.fillStyle = 'rgba(0,0,0,0.85)';
       ctx.beginPath();
       ctx.roundRect(x-10, y-fontSize-4, tw+20, fontSize+16, 6);
       ctx.fill();
-
-      ctx.strokeStyle = 'rgba(0,0,0,0.9)';
-      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(0,0,0,0.9)'; ctx.lineWidth = 3;
       ctx.strokeText(code, x, y);
-      ctx.fillStyle = 'white';
-      ctx.fillText(code, x, y);
-
+      ctx.fillStyle = 'white'; ctx.fillText(code, x, y);
       canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.92);
     };
     img.src = base64;
@@ -1427,18 +1453,13 @@ async function drawCodeOnImage(base64, code) {
 async function createDriveFolder(name, parentId) {
   const meta = { name, mimeType: 'application/vnd.google-apps.folder' };
   if (parentId) meta.parents = [parentId];
-
   const res = await fetch('https://www.googleapis.com/drive/v3/files', {
     method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + googleToken,
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Authorization': 'Bearer ' + googleToken, 'Content-Type': 'application/json' },
     body: JSON.stringify(meta)
   });
   if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
-  return data.id;
+  return (await res.json()).id;
 }
 
 async function uploadToDrive(blob, filename, folderId) {
@@ -1446,80 +1467,47 @@ async function uploadToDrive(blob, filename, folderId) {
   const form = new FormData();
   form.append('metadata', new Blob([JSON.stringify(meta)], { type: 'application/json' }));
   form.append('file', blob);
-
   const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + googleToken },
-    body: form,
+    method: 'POST', headers: { 'Authorization': 'Bearer ' + googleToken }, body: form,
   });
   if (!res.ok) throw new Error('HTTP ' + res.status);
 }
 
 // ===== UTILS =====
 function fileToBase64(file) {
-  return new Promise(resolve => {
-    const r = new FileReader();
-    r.onload = e => resolve(e.target.result);
-    r.readAsDataURL(file);
-  });
+  return new Promise(resolve => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.readAsDataURL(file); });
 }
-
-function addLog(box, html) {
-  box.innerHTML += html + '<br>';
-  box.scrollTop = box.scrollHeight;
-}
-
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function confirmDeleteAll() {
-  if (products.length === 0) {
-    showToast('📦 Chưa có sản phẩm nào');
-    return;
-  }
-  document.getElementById('deleteAllDesc').textContent =
-    `Sẽ xóa toàn bộ ${products.length} sản phẩm (${products.reduce((s,p)=>s+p.images.length,0)} ảnh). Không thể hoàn tác!`;
-  document.getElementById('deleteAllPopup').classList.add('active');
-}
-
-function closeDeletePopup() {
-  document.getElementById('deleteAllPopup').classList.remove('active');
-}
-
-function doDeleteAll() {
-  products = [];
-  saveToStorage();
-  renderProducts();
-  updateExportTab();
-  closeDeletePopup();
-  showToast('🗑️ Đã xóa toàn bộ sản phẩm');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-function escapeHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
 function blobToBase64(blob) {
-  return new Promise(resolve => {
-    const r = new FileReader();
-    r.onload = e => resolve(e.target.result);
-    r.readAsDataURL(blob);
-  });
+  return new Promise(resolve => { const r = new FileReader(); r.onload = e => resolve(e.target.result); r.readAsDataURL(blob); });
 }
-
 function base64ToBlob(base64, mime) {
   const binary = atob(base64.split(',')[1]);
   const arr = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
   return new Blob([arr], { type: mime });
 }
+function addLog(box, html) { box.innerHTML += html + '<br>'; box.scrollTop = box.scrollHeight; }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+function confirmDeleteAll() {
+  if (products.length === 0) { showToast('📦 Chưa có sản phẩm nào'); return; }
+  document.getElementById('deleteAllDesc').textContent =
+    `Sẽ xóa toàn bộ ${products.length} sản phẩm (${products.reduce((s,p)=>s+p.images.length,0)} ảnh). Không thể hoàn tác!`;
+  document.getElementById('deleteAllPopup').classList.add('active');
+}
+function closeDeletePopup() { document.getElementById('deleteAllPopup').classList.remove('active'); }
+function doDeleteAll() {
+  products = []; saveToStorage(); renderProducts(); updateExportTab(); closeDeletePopup();
+  showToast('🗑️ Đã xóa toàn bộ sản phẩm');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
