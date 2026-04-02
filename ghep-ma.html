@@ -1355,7 +1355,7 @@ async function startZipDownload() {
         const filename = `${product.code}_${String(i + 1).padStart(2, '0')}.jpg`;
 
         // Ghi EXIF date tăng dần để iPhone sort đúng thứ tự
-const fakeDate = new Date(2000, 0, 1, 0, 0, done); // done tăng dần mỗi ảnh
+const fakeDate = new Date(Date.now() - done * 1000); 
 const dateStr = `${fakeDate.getFullYear()}:${String(fakeDate.getMonth()+1).padStart(2,'0')}:${String(fakeDate.getDate()).padStart(2,'0')} ${String(fakeDate.getHours()).padStart(2,'0')}:${String(fakeDate.getMinutes()).padStart(2,'0')}:${String(fakeDate.getSeconds()).padStart(2,'0')}`;
 const exifObj = { "Exif": { [piexif.ExifIFD.DateTimeOriginal]: dateStr } };
 const exifBytes = piexif.dump(exifObj);
