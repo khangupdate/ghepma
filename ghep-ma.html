@@ -10,6 +10,7 @@
 <title>Ghép Mã Sản Phẩm</title>
 <!-- THÊM MỚI: JSZip để đóng gói ZIP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
@@ -1352,8 +1353,17 @@ async function startZipDownload() {
         const blob = await drawCodeOnImage(product.images[i], product.code);
         // Tên file: MÃ_01.jpg → cùng mã đứng cạnh nhau khi sort
         const filename = `${product.code}_${String(i + 1).padStart(2, '0')}.jpg`;
-        const arrayBuffer = await blob.arrayBuffer();
-        zip.file(filename, arrayBuffer);
+
+        // Ghi EXIF date tăng dần để iPhone sort đúng thứ tự
+const fakeDate = new Date(2000, 0, 1, 0, 0, done); // done tăng dần mỗi ảnh
+const dateStr = `${fakeDate.getFullYear()}:${String(fakeDate.getMonth()+1).padStart(2,'0')}:${String(fakeDate.getDate()).padStart(2,'0')} ${String(fakeDate.getHours()).padStart(2,'0')}:${String(fakeDate.getMinutes()).padStart(2,'0')}:${String(fakeDate.getSeconds()).padStart(2,'0')}`;
+const exifObj = { "Exif": { [piexif.ExifIFD.DateTimeOriginal]: dateStr } };
+const exifBytes = piexif.dump(exifObj);
+const jpegBase64 = await blobToBase64(blob);
+const newJpeg = piexif.insert(exifBytes, jpegBase64);
+const finalBlob = base64ToBlob(newJpeg, 'image/jpeg');
+const arrayBuffer = await finalBlob.arrayBuffer();
+zip.file(filename, arrayBuffer);
         addLog(progressLog, `<span class="ok">✅ ${filename}</span>`);
       } catch(e) {
         addLog(progressLog, `<span class="err">❌ ${product.code}_${i+1}: ${e.message}</span>`);
@@ -1494,6 +1504,22 @@ function showToast(msg) {
 function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+function blobToBase64(blob) {
+  return new Promise(resolve => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.readAsDataURL(blob);
+  });
+}
+
+function base64ToBlob(base64, mime) {
+  const binary = atob(base64.split(',')[1]);
+  const arr = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+  return new Blob([arr], { type: mime });
+}
+
 </script>
 </body>
 </html>
