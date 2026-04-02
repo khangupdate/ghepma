@@ -8,6 +8,8 @@
 <meta name="apple-mobile-web-app-title" content="Ghép Mã">
 <meta name="theme-color" content="#1a1a2e">
 <title>Ghép Mã Sản Phẩm</title>
+<!-- THÊM MỚI: JSZip để đóng gói ZIP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
@@ -689,6 +691,10 @@ input[type="file"] { display: none; }
         <button class="btn-main" id="exportBtn" onclick="startExport()" disabled>
           ☁️ Ghép mã & Upload Drive
         </button>
+        <!-- THÊM MỚI: nút tải ZIP -->
+        <button class="btn-main" id="zipBtn" onclick="startZipDownload()" disabled style="background:linear-gradient(135deg,#4cc9f0,#06d6a0);margin-top:10px;">
+          📦 Ghép mã & Tải ZIP về máy
+        </button>
       </div>
 
       <div class="progress-card" id="progressCard">
@@ -701,7 +707,7 @@ input[type="file"] { display: none; }
 
       <div class="export-card" style="background:rgba(6,214,160,0.08);border-color:var(--green);display:none;" id="doneCard">
         <div style="font-size:15px;font-weight:800;color:var(--green);margin-bottom:4px;">✅ Hoàn thành!</div>
-        <div style="font-size:13px;color:var(--text2);">Tất cả ảnh đã được upload lên Google Drive thành công.</div>
+        <div style="font-size:13px;color:var(--text2);">Tất cả ảnh đã được xử lý thành công.</div>
       </div>
     </div>
 
@@ -789,7 +795,6 @@ input[type="file"] { display: none; }
     <div class="sheet-title">Chọn ảnh hàng loạt</div>
     <div class="sheet-sub">Chọn 1 lần nhiều ảnh — app tự sắp xếp a→z và nhóm 4 ảnh/sản phẩm</div>
     <div style="padding:20px;">
-      <!-- iOS Safari: bọc bằng label for= để trigger input file chắc chắn -->
       <label for="bulkFileInput" id="importPickArea"
         style="display:block;border:2px dashed var(--border);border-radius:var(--radius);padding:40px 20px;text-align:center;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
         <div style="font-size:48px;margin-bottom:12px;">📸</div>
@@ -845,7 +850,6 @@ input[type="file"] { display: none; }
   </div>
 </div>
 
-<!-- iOS Safari: input phải ở trong DOM bình thường, không display:none -->
 <input type="file" id="bulkFileInput" accept="image/*" multiple onchange="onBulkFilesChosen(this)" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
 
 <!-- DELETE ALL POPUP -->
@@ -872,15 +876,15 @@ let clientId = localStorage.getItem('gClientId') || '756532613645-sqfvg1dsfdnufl
 let targetFolderId = localStorage.getItem('gFolderId') || '1feDiRJY-p1ff3cHUfNeQD3rvoqEDjpxX';
 
 // Bulk import state
-let bulkGroups = [];       // [{files:[File,...], urls:[str,...]}, ...]
-let bulkCodes = [];        // all codes from textarea
-let remainingCodes = [];   // codes not yet assigned
-let assignedCodes = [];    // codes assigned to each group
+let bulkGroups = [];
+let bulkCodes = [];
+let remainingCodes = [];
+let assignedCodes = [];
 let currentAssignIdx = 0;
 let currentSelectedCode = null;
 
 // ===== INIT =====
-  if (googleToken) {
+if (googleToken) {
   document.getElementById('driveStatusName').textContent = 'Google Drive đã kết nối';
   document.getElementById('driveStatusSub').innerHTML = '<span class="dot"></span>Sẵn sàng upload';
   document.getElementById('driveLoginBtn').textContent = '✓ Đã đăng nhập';
@@ -897,13 +901,11 @@ function switchTab(name) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   document.getElementById('nav-' + name).classList.add('active');
-  // fab removed
   if (name === 'export') updateExportTab();
 }
 
 // ===== SHEETS =====
 function openBulkImport() {
-  // reset
   bulkGroups = [];
   bulkCodes = [];
   remainingCodes = [];
@@ -929,7 +931,6 @@ function showImportStep(n) {
   document.getElementById('importStep1').style.display = n===1 ? 'block' : 'none';
   document.getElementById('importStep2').style.display = n===2 ? 'block' : 'none';
   document.getElementById('importStep3').style.display = n===3 ? 'block' : 'none';
-  // step dots
   for (let i = 0; i < 3; i++) {
     const dot = document.getElementById('sdot-' + i);
     dot.className = 'step-dot';
@@ -940,8 +941,6 @@ function showImportStep(n) {
 
 // ===== BULK FILE PICK =====
 function triggerBulkPick() {
-  // iOS Safari: .click() từ div/button onclick không trigger file picker đáng tin cậy
-  // Phải dùng label[for] wrap trực tiếp input
   const input = document.getElementById('bulkFileInput');
   input.value = '';
   input.click();
@@ -951,10 +950,8 @@ function onBulkFilesChosen(input) {
   const files = Array.from(input.files);
   if (!files.length) return;
 
-  // Sort by filename a→z
   files.sort((a, b) => a.lastModified - b.lastModified);
 
-  // Group into sets of 4
   bulkGroups = [];
   for (let i = 0; i < files.length; i += 4) {
     const grpFiles = files.slice(i, i + 4);
@@ -962,7 +959,6 @@ function onBulkFilesChosen(input) {
     bulkGroups.push({ files: grpFiles, urls: grpUrls });
   }
 
-  // Update UI
   const banner = document.getElementById('importPickedBanner');
   const remainder = files.length % 4;
   let bannerText = `✅ ${files.length} ảnh → ${bulkGroups.length} nhóm`;
@@ -970,7 +966,6 @@ function onBulkFilesChosen(input) {
   banner.textContent = bannerText;
   document.getElementById('importPickedInfo').style.display = 'block';
 
-  // Preview: show first image of each group in a small grid
   const preview = document.getElementById('importGroupPreview');
   preview.innerHTML = bulkGroups.map((g, i) => `
     <div style="position:relative;">
@@ -1039,7 +1034,6 @@ function renderAssignStep() {
   document.getElementById('assignProgressLabel').textContent =
     `Còn ${total - currentAssignIdx} nhóm chưa gán · ${remainingCodes.length} mã còn lại`;
 
-  // Render images
   const grid = document.getElementById('assignImgGrid');
   grid.innerHTML = group.urls.map((url, i) => `
     <div class="assign-img-cell">
@@ -1048,7 +1042,6 @@ function renderAssignStep() {
     </div>
   `).join('');
 
-  // Render code list
   currentSelectedCode = null;
   document.getElementById('assignConfirmBtn').disabled = true;
   const list = document.getElementById('codeListEl');
@@ -1059,12 +1052,10 @@ function renderAssignStep() {
     </div>
   `).join('');
 
-  // Scroll code list to top
   list.scrollTop = 0;
 }
 
 function selectCode(idx, code) {
-  // deselect all
   document.querySelectorAll('.code-list-item').forEach(el => el.classList.remove('selected'));
   document.getElementById('codeItem-' + idx).classList.add('selected');
   currentSelectedCode = { idx, code };
@@ -1074,11 +1065,9 @@ function selectCode(idx, code) {
 async function confirmAssign() {
   if (!currentSelectedCode) return;
 
-  // Assign code to current group
   assignedCodes[currentAssignIdx] = currentSelectedCode.code;
   remainingCodes.splice(currentSelectedCode.idx, 1);
 
-  // Save product
   const group = bulkGroups[currentAssignIdx];
   const code = currentSelectedCode.code.toUpperCase();
   const images = [];
@@ -1098,7 +1087,6 @@ async function confirmAssign() {
   currentAssignIdx++;
 
   if (currentAssignIdx >= bulkGroups.length) {
-    // Done!
     renderProducts();
     updateExportTab();
     closeAllSheets();
@@ -1106,9 +1094,7 @@ async function confirmAssign() {
     return;
   }
 
-  // Check if codes ran out
   if (remainingCodes.length === 0 && currentAssignIdx < bulkGroups.length) {
-    // Show warning, go back to step2 to add more codes
     renderProducts();
     saveToStorage();
     showImportStep(2);
@@ -1118,7 +1104,6 @@ async function confirmAssign() {
     document.getElementById('codesTextarea').value = '';
     document.getElementById('codesCount').textContent = '0 mã';
     document.getElementById('toStep3Btn').disabled = true;
-    // Update step2 sub
     document.getElementById('step2Sub').textContent = `Cần thêm mã cho ${bulkGroups.length - currentAssignIdx} nhóm còn lại`;
     showToast(`⚠️ Hết mã! Paste thêm mã để tiếp tục`);
     return;
@@ -1127,13 +1112,12 @@ async function confirmAssign() {
   renderAssignStep();
 }
 
-// Override goToStep3 for continue flow (when codes ran out mid-way)
+// Override goToStep3 for continue flow
 function goToStep3() {
   if (currentAssignIdx === 0) {
     remainingCodes = [...bulkCodes];
     assignedCodes = new Array(bulkGroups.length).fill(null);
   } else {
-    // continuing: append new codes
     const raw = document.getElementById('codesTextarea').value;
     const newCodes = raw.split('\n').map(s => s.trim()).filter(s => s.length > 0);
     remainingCodes = [...newCodes];
@@ -1204,12 +1188,15 @@ function updateFolderName() {
   return name;
 }
 
+// THÊM MỚI: enable cả nút zipBtn
 function updateExportTab() {
   const summary = document.getElementById('exportSummary');
   const btn = document.getElementById('exportBtn');
+  const zipBtn = document.getElementById('zipBtn');
   const total = products.reduce((sum, p) => sum + p.images.length, 0);
   summary.textContent = `${products.length} sản phẩm · ${total} ảnh sẽ được ghép mã và upload`;
   btn.disabled = !(products.length > 0 && googleToken);
+  zipBtn.disabled = !(products.length > 0);
 }
 
 // ===== FOLDER ID =====
@@ -1221,12 +1208,8 @@ function saveFolderId() {
 }
 
 function parseFolderId(input) {
-  // If it's a Drive link, extract the ID
-  // https://drive.google.com/drive/folders/FOLDER_ID
-  // https://drive.google.com/drive/u/0/folders/FOLDER_ID
   const match = input.match(/folders\/([a-zA-Z0-9_-]+)/);
   if (match) return match[1];
-  // Otherwise treat as raw ID
   return input.trim();
 }
 
@@ -1234,10 +1217,7 @@ function updateFolderIdPreview() {
   const raw = document.getElementById('folderIdInput').value.trim();
   const parsed = parseFolderId(raw);
   const el = document.getElementById('folderIdPreview');
-  if (!parsed) {
-    el.textContent = '';
-    return;
-  }
+  if (!parsed) { el.textContent = ''; return; }
   if (raw !== parsed) {
     el.textContent = `✅ Đã nhận folder ID: ${parsed}`;
     el.style.color = 'var(--green)';
@@ -1308,7 +1288,6 @@ async function startExport() {
 
   const subFolderName = updateFolderName();
 
-  // 1. Create subfolder inside target folder (or root if no target)
   addLog(progressLog, '📁 Đang tạo thư mục con trên Drive...');
   let subFolderId;
   try {
@@ -1321,7 +1300,6 @@ async function startExport() {
     return;
   }
 
-  // 2. Process each product
   const total = products.reduce((sum, p) => sum + p.images.length, 0);
   let done = 0;
 
@@ -1347,6 +1325,61 @@ async function startExport() {
   showToast('🎉 Upload Drive thành công!');
 }
 
+// THÊM MỚI: hàm tải ZIP về máy
+async function startZipDownload() {
+  if (products.length === 0) { showToast('⚠️ Chưa có sản phẩm nào'); return; }
+
+  const progressCard = document.getElementById('progressCard');
+  const progressFill = document.getElementById('progressFill');
+  const progressLog  = document.getElementById('progressLog');
+  const zipBtn       = document.getElementById('zipBtn');
+  const doneCard     = document.getElementById('doneCard');
+
+  progressCard.style.display = 'block';
+  doneCard.style.display = 'none';
+  zipBtn.disabled = true;
+  progressLog.innerHTML = '';
+
+  const zip = new JSZip();
+  const total = products.reduce((sum, p) => sum + p.images.length, 0);
+  let done = 0;
+
+  addLog(progressLog, '📦 Đang ghép mã và đóng gói...');
+
+  for (const product of products) {
+    for (let i = 0; i < product.images.length; i++) {
+      try {
+        const blob = await drawCodeOnImage(product.images[i], product.code);
+        // Tên file: MÃ_01.jpg → cùng mã đứng cạnh nhau khi sort
+        const filename = `${product.code}_${String(i + 1).padStart(2, '0')}.jpg`;
+        const arrayBuffer = await blob.arrayBuffer();
+        zip.file(filename, arrayBuffer);
+        addLog(progressLog, `<span class="ok">✅ ${filename}</span>`);
+      } catch(e) {
+        addLog(progressLog, `<span class="err">❌ ${product.code}_${i+1}: ${e.message}</span>`);
+      }
+      done++;
+      progressFill.style.width = Math.round(done / total * 100) + '%';
+      await sleep(30);
+    }
+  }
+
+  addLog(progressLog, '⏳ Đang tạo file ZIP...');
+  const zipBlob = await zip.generateAsync({ type: 'blob' });
+  const zipName = updateFolderName() + '.zip';
+  const url = URL.createObjectURL(zipBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = zipName;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  addLog(progressLog, `🎉 Xong! File <b>${zipName}</b> đã tải về.`);
+  doneCard.style.display = 'block';
+  zipBtn.disabled = false;
+  showToast('📦 Tải ZIP thành công!');
+}
+
 async function drawCodeOnImage(base64, code) {
   return new Promise(resolve => {
     const canvas = document.getElementById('canvas');
@@ -1357,14 +1390,13 @@ async function drawCodeOnImage(base64, code) {
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      const fontSize = Math.max(5, Math.round(img.width * 0.0125));
+      const fontSize = Math.max(10, Math.round(img.width * 0.0125));
       ctx.font = `bold ${fontSize}px Arial`;
       const tw = ctx.measureText(code).width;
       const pad = 16;
       const x = img.width  - tw - pad;
       const y = img.height - pad * 4;
 
-      // Dark opaque background
       ctx.fillStyle = 'rgba(0,0,0,0.85)';
       ctx.beginPath();
       ctx.roundRect(x-10, y-fontSize-4, tw+20, fontSize+16, 6);
