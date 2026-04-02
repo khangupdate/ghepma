@@ -1565,7 +1565,7 @@ async function drawCodeOnImage(base64, code) {
     img.onload = () => {
       canvas.width = img.width; canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      const fontSize = Math.max(10, Math.round(img.width * 0.0125));
+      const fontSize = Math.max(10, Math.round(img.width * 0.0225));
       ctx.font = `bold ${fontSize}px Arial`;
       const tw = ctx.measureText(code).width;
       const pad = 16;
