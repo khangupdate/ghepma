@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=MuseoModerno:wght@700&display=swap');
 
 :root {
   --bg: #0f0f1a;
@@ -556,7 +556,6 @@ input[type="file"] { display: none; }
   padding: 0 20px;
   max-height: 60vh;
   overflow-y: auto;
-  /* disable page scroll while dragging */
   touch-action: pan-y;
 }
 .flat-group { margin-bottom: 16px; }
@@ -574,7 +573,6 @@ input[type="file"] { display: none; }
   gap: 5px;
 }
 
-/* ---- individual cell ---- */
 .flat-img-cell {
   aspect-ratio: 1;
   background: var(--card2);
@@ -603,7 +601,6 @@ input[type="file"] { display: none; }
   pointer-events: none;
 }
 
-/* dragging source */
 .flat-img-cell.dragging {
   opacity: 0.35;
   transform: scale(0.93);
@@ -611,21 +608,18 @@ input[type="file"] { display: none; }
   cursor: grabbing;
 }
 
-/* drop target highlight */
 .flat-img-cell.drop-target {
   border-color: var(--green);
   box-shadow: 0 0 0 3px rgba(6,214,160,0.35);
   transform: scale(1.06);
 }
 
-/* just-moved flash */
 @keyframes flash-green {
   0%   { background: rgba(6,214,160,0.4); }
   100% { background: transparent; }
 }
 .flat-img-cell.just-moved { animation: flash-green 0.55s ease forwards; }
 
-/* floating drag ghost */
 #dragGhost {
   position: fixed;
   width: 72px; height: 72px;
@@ -846,7 +840,7 @@ input[type="file"] { display: none; }
 
 <input type="file" id="bulkFileInput" accept="image/*" multiple onchange="onBulkFilesChosen(this)" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;z-index:-1;">
 
-<!-- ===== REORDER SHEET (NEW LOGIC) ===== -->
+<!-- ===== REORDER SHEET ===== -->
 <div class="sheet" id="reorderSheet" style="z-index:210;">
   <div class="sheet-handle"></div>
   <div class="sheet-title">🔀 Sắp xếp lại thứ tự ảnh</div>
@@ -860,7 +854,6 @@ input[type="file"] { display: none; }
     <button class="btn-main" onclick="closeReorderSheet()" style="background:linear-gradient(135deg,var(--blue),var(--green));">✅ Xong</button>
   </div>
 </div>
-
 
 <!-- DRAG GHOST -->
 <div id="dragGhost"><img id="dragGhostImg" src=""><div class="ghost-num" id="dragGhostNum"></div></div>
@@ -888,8 +881,8 @@ let googleToken = localStorage.getItem('gToken') || null;
 let clientId = localStorage.getItem('gClientId') || '756532613645-sqfvg1dsfdnufl5tb4kttmim8ru6lt2l.apps.googleusercontent.com';
 let targetFolderId = localStorage.getItem('gFolderId') || '1feDiRJY-p1ff3cHUfNeQD3rvoqEDjpxX';
 
-let bulkGroups = [];      // array of { files[], urls[] } — grouped view (each ≤ 4)
-let flatList = [];        // SINGLE flat array of { file, url } — source of truth for reorder
+let bulkGroups = [];
+let flatList = [];
 
 let bulkCodes = [];
 let remainingCodes = [];
@@ -897,8 +890,7 @@ let assignedCodes = [];
 let currentAssignIdx = 0;
 let currentSelectedCode = null;
 
-// Reorder state
-let reorderSrcIdx = null; // index in flatList of selected image
+let reorderSrcIdx = null;
 
 // ===== INIT =====
 if (googleToken) {
@@ -994,13 +986,11 @@ async function onBulkFilesChosen(input) {
   const filesWithDate = files.map((f, i) => ({ file: f, date: dates[i] }));
   filesWithDate.sort((a, b) => a.date - b.date);
 
-  // Build flat list
   flatList = filesWithDate.map(x => ({
     file: x.file,
     url: URL.createObjectURL(x.file)
   }));
 
-  // Sync to bulkGroups for display
   syncFlatToGroups();
   renderGroupPreview();
 
@@ -1013,9 +1003,6 @@ async function onBulkFilesChosen(input) {
   input.value = '';
 }
 
-/**
- * Rebuild bulkGroups from flatList (chunks of 4)
- */
 function syncFlatToGroups() {
   bulkGroups = [];
   for (let i = 0; i < flatList.length; i += 4) {
@@ -1048,23 +1035,9 @@ function renderGroupPreview() {
   `).join('');
 }
 
-// ===== NEW REORDER SHEET =====
-
-function openReorderSheet() {
-  reorderSrcIdx = null;
-  renderFlatGrid();
-  document.getElementById('reorderSheet').classList.add('active');
-}
-
-function closeReorderSheet() {
-  document.getElementById('reorderSheet').classList.remove('active');
-  renderGroupPreview(); // refresh step-1 preview
-}
-
-// ===== REORDER SHEET — DRAG & DROP =====
-
-let dragSrcPos   = null;   // position index being dragged
-let dragOverPos  = null;   // position index currently hovered
+// ===== REORDER SHEET =====
+let dragSrcPos   = null;
+let dragOverPos  = null;
 
 function openReorderSheet() {
   dragSrcPos = null; dragOverPos = null;
@@ -1077,7 +1050,6 @@ function closeReorderSheet() {
   renderGroupPreview();
 }
 
-/* ---- render (full build, called once on open) ---- */
 function renderFlatGrid() {
   const total     = flatList.length;
   const numGroups = Math.ceil(total / 4);
@@ -1106,11 +1078,9 @@ function renderFlatGrid() {
   wrap.innerHTML = html;
   wrap._total = total;
 
-  // Attach touch handlers after render
   attachDragHandlers();
 }
 
-/* ---- patch in-place (after each move — no DOM recreation) ---- */
 function patchFlatGrid() {
   const total = flatList.length;
   const wrap  = document.getElementById('flatGridWrap');
@@ -1133,14 +1103,6 @@ function patchFlatGrid() {
   }
 }
 
-/* ================================================================
-   TOUCH DRAG & DROP
-   Strategy:
-   - touchstart  → record src pos, show ghost
-   - touchmove   → move ghost, highlight target cell under finger
-   - touchend    → splice flatList (domino), patch grid, flash dest
-   ================================================================ */
-
 const ghost    = document.getElementById('dragGhost');
 const ghostImg = document.getElementById('dragGhostImg');
 const ghostNum = document.getElementById('dragGhostNum');
@@ -1156,7 +1118,6 @@ function attachDragHandlers() {
 }
 
 function cellFromPoint(x, y) {
-  // elementFromPoint works even when the ghost covers the finger point
   const el = document.elementFromPoint(x, y);
   if (!el) return null;
   const cell = el.closest('.flat-img-cell[data-pos]');
@@ -1171,7 +1132,6 @@ function onTouchStart(e) {
   dragSrcPos = parseInt(cell.dataset.pos);
   dragOverPos = null;
 
-  // Show ghost
   const item = flatList[dragSrcPos];
   ghostImg.src        = item.url;
   ghostNum.textContent = dragSrcPos + 1;
@@ -1181,7 +1141,7 @@ function onTouchStart(e) {
 
   cell.classList.add('dragging');
   _touchScrollBlocked = true;
-  e.preventDefault(); // prevent scroll while dragging
+  e.preventDefault();
 }
 
 function onTouchMove(e) {
@@ -1192,12 +1152,10 @@ function onTouchMove(e) {
   ghost.style.left = touch.clientX + 'px';
   ghost.style.top  = touch.clientY + 'px';
 
-  // Find cell under finger (hide ghost temporarily to hit-test underneath)
   ghost.style.display = 'none';
   const cell = cellFromPoint(touch.clientX, touch.clientY);
   ghost.style.display = 'block';
 
-  // Clear previous drop-target highlight
   if (dragOverPos !== null) {
     const prev = document.getElementById('fcell-' + dragOverPos);
     if (prev) prev.classList.remove('drop-target');
@@ -1227,19 +1185,16 @@ function onTouchEnd(e) {
   resetDragState();
 
   if (destPos === null || destPos === srcPos) {
-    // Dropped on same cell or outside — cancel
     patchFlatGrid();
     return;
   }
 
-  // ---- Domino splice ----
   const [item] = flatList.splice(srcPos, 1);
   flatList.splice(destPos, 0, item);
   syncFlatToGroups();
 
   patchFlatGrid();
 
-  // Flash destination
   const destCell = document.getElementById('fcell-' + destPos);
   if (destCell) {
     destCell.classList.add('just-moved');
@@ -1269,7 +1224,6 @@ function resetDragState() {
 }
 
 // ===== STEP 2 =====
-
 function goToStep2() {
   document.getElementById('step2Sub').textContent = `Cần ít nhất ${bulkGroups.length} mã cho ${bulkGroups.length} nhóm`;
   showImportStep(2);
@@ -1557,16 +1511,19 @@ async function startZipDownload() {
   showToast('📦 Tải ZIP thành công!');
 }
 
+// ===== VẼ MÃ LÊN ẢNH (dùng font MuseoModerno) =====
 async function drawCodeOnImage(base64, code) {
   return new Promise(resolve => {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
-    img.onload = () => {
+    img.onload = async () => {
       canvas.width = img.width; canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
       const fontSize = Math.max(10, Math.round(img.width * 0.03225));
-      ctx.font = `bold ${fontSize}px Arial`;
+      // Chờ font MuseoModerno load xong trước khi vẽ
+      await document.fonts.load(`bold ${fontSize}px 'MuseoModerno'`);
+      ctx.font = `bold ${fontSize}px 'MuseoModerno', sans-serif`;
       const tw = ctx.measureText(code).width;
       const pad = 16;
       const x = img.width - tw - pad;
