@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/piexifjs@1.0.6/piexif.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=MuseoModerno:wght@700&family=Coiny&family=Braah+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=MuseoModerno:wght@700&family=Coiny&family=Braah+One&family=Itim&display=swap');
 
 :root {
   --bg: #0f0f1a;
@@ -1521,9 +1521,9 @@ async function drawCodeOnImage(base64, code) {
       canvas.width = img.width; canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
       const fontSize = Math.max(10, Math.round(img.width * 0.03225));
-      // Chờ font Braah One load xong trước khi vẽ
-      await document.fonts.load(`bold ${fontSize}px 'Braah One'`);
-      ctx.font = `bold ${fontSize}px 'Braah One', sans-serif`;
+      // Chờ font Itim load xong trước khi vẽ
+      await document.fonts.load(`bold ${fontSize}px 'Itim'`);
+      ctx.font = `bold ${fontSize}px 'Itim', sans-serif`;
       const tw = ctx.measureText(code).width;
       const pad = 16;
       const x = img.width - tw - pad;
